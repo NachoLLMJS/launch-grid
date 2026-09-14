@@ -8,7 +8,7 @@
 body{background:var(--paper);color:var(--ink)}
 .noise{opacity:.055;mix-blend-mode:multiply}
 .topbar{background:rgba(243,240,232,.92);border-color:#c7c3b8;color:var(--ink)}
-.brand{color:var(--ink)}.brand-mark{color:var(--orange)}
+.brand{color:var(--ink)}.brand-logo{width:35px;height:35px;object-fit:contain;margin-right:8px;filter:drop-shadow(0 0 5px rgba(102,87,255,.25))}
 .network-pill{color:#545149;border-color:#bdb9ae;background:#ebe7dc}.network-pill i{background:var(--orange);box-shadow:none}
 .topbar nav a{color:#56534d}.topbar nav a:hover{color:#000}
 .wallet-btn{background:var(--ink);border-color:var(--ink);color:#fff}.wallet-btn:hover{background:var(--violet);border-color:var(--violet)}

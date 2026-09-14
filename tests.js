@@ -27,7 +27,8 @@ const checks = [
   ['empty launched-token registry', html.includes('id="tokens"') && html.includes('NO TOKENS LAUNCHED YET') && html.includes('0 RESULTS')],
   ['real BNB wallet request', js.includes("method: 'eth_requestAccounts'") && js.includes("chainId: '0x38'")],
   ['BNB switch and add network', js.includes("method: 'wallet_switchEthereumChain'") && js.includes("method: 'wallet_addEthereumChain'")],
-  ['no fake demo wallet address', !js.includes('0x71A4') && !js.includes('DEMO WALLET CONNECTED')]
+  ['no fake demo wallet address', !js.includes('0x71A4') && !js.includes('DEMO WALLET CONNECTED')],
+  ['official Launch Grid artwork wired', html.includes('assets/launch-grid-logo.png') && html.includes('favicon.png?v=1')]
 ];
 let failed = 0;
 for (const [name, ok] of checks) { console.log(`${ok ? 'PASS' : 'FAIL'} ${name}`); if (!ok) failed++; }
