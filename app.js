@@ -40,10 +40,7 @@
   }
 
   function closeLauncher() {
-    const launcher = $('#create');
-    launcher.classList.remove('open');
-    launcher.setAttribute('aria-hidden', 'true');
-    document.querySelector('[data-open-launcher]')?.focus();
+    window.location.href = 'index.html';
   }
 
   function setStep(next) {

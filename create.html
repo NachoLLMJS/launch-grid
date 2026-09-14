@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="Launch one token across BNB Chain, Robinhood Chain and Solana." name="description"/>
+  <meta content="#0b0b0b" name="theme-color"/>
+  <title>Launch Grid</title>
+  <link href="favicon.png?v=1" rel="icon" type="image/png"/>
+  <link href="styles.css" rel="stylesheet"/>
+</head>
+<body>
+  <div aria-hidden="true" class="noise"></div>
+  <header class="topbar">
+    <a aria-label="Launch Grid home" class="brand" href="index.html"><img alt="" class="brand-logo" src="assets/launch-grid-logo.png"/> LAUNCH<span>GRID</span><small>$LG</small></a>
+    <div class="network-pill"><i></i> ROUTER / 03 NETWORKS</div>
+    <nav><a href="index.html">HOME</a><a class="active" href="create.html">CREATE</a><a href="tokens.html">TOKENS</a><a href="index.html#how">ROUTING</a></nav>
+    <a aria-label="Launch Grid on X" class="x-link" href="https://x.com/getlaunchgrid" rel="noopener noreferrer" target="_blank">X @GETLAUNCHGRID ↗</a><button class="wallet-btn" id="walletBtn"><span class="wallet-dot"></span><span id="walletLabel">CONNECT BNB WALLET</span></button>
+  </header>
+  <nav aria-label="Mobile pages" class="page-nav"><a href="index.html">HOME</a><a class="active" href="create.html">CREATE</a><a href="tokens.html">TOKENS</a></nav>
+
+  <main>
+
+
+    <section aria-hidden="false" class="launch-shell open standalone-launcher" id="create">
+      <button aria-label="Close launcher" class="launcher-close" data-home="true" id="launcherClose" type="button">CLOSE ×</button>
+      <aside class="stepper">
+        <div class="step active" data-step-nav="1"><b>01</b><span>TOKEN DETAILS<small>Identity &amp; supply</small></span></div>
+        <div class="step" data-step-nav="2"><b>02</b><span>DEV BUYS<small>Optional per chain</small></span></div>
+        <div class="step" data-step-nav="3"><b>03</b><span>REVIEW<small>Confirm launch</small></span></div>
+        <div class="step-line"><i id="stepProgress"></i></div>
+        <div class="aside-note"><span>ATOMIC DEPLOYMENT</span><p>All three launches are prepared together and tracked from one interface.</p></div>
+      </aside>
+
+      <div class="form-card">
+        <form id="launchForm" novalidate="">
+          <section class="form-step active" data-step="1">
+            <div class="section-head"><div><span>STEP 01 / 03</span><h2>BUILD YOUR TOKEN</h2></div><div class="required">* REQUIRED FIELDS</div></div>
+            <div class="token-grid">
+              <label class="logo-upload" id="logoDrop">
+                <input accept="image/png,image/jpeg,image/webp" hidden="" id="logoInput" type="file"/>
+                <span class="logo-preview" id="logoPreview"><b>+</b></span>
+                <strong>UPLOAD LOGO</strong><small>PNG, JPG OR WEBP · MAX 5MB</small>
+              </label>
+              <div class="fields">
+                <label><span>TOKEN NAME *</span><input id="tokenName" maxlength="32" placeholder="e.g. Triad Protocol" required=""/><small><i id="nameCount">0</i>/32</small></label>
+                <label><span>TICKER *</span><div class="input-prefix"><b>$</b><input id="ticker" maxlength="10" placeholder="TRI" required=""/></div><small><i id="tickerCount">0</i>/10</small></label>
+              </div>
+            </div>
+            <label class="full"><span>DESCRIPTION</span><textarea id="description" maxlength="280" placeholder="Tell the world what you are building..."></textarea><small><i id="descCount">0</i>/280</small></label>
+            <div class="row two">
+              <label><span>TOTAL SUPPLY *</span><div class="input-suffix"><input id="supply" inputmode="numeric" required="" value="1000000000"/><b>TOKENS</b></div></label>
+              <label><span>WEBSITE</span><input id="website" placeholder="https://" type="url"/></label>
+            </div>
+            <div class="row two">
+              <label><span>X / TWITTER</span><input id="twitter" placeholder="@username"/></label>
+              <label><span>TELEGRAM</span><input id="telegram" placeholder="t.me/community"/></label>
+            </div>
+          </section>
+
+          <section class="form-step" data-step="2">
+            <div class="section-head"><div><span>STEP 02 / 03</span><h2>SET YOUR DEV BUYS</h2></div><div class="optional">OPTIONAL</div></div>
+            <p class="lead">Seed each market independently at launch. Leave any amount at zero to skip that chain.</p>
+            <div class="dev-buy-list">
+              <article class="dev-card bnb" data-chain="bnb"><div class="chain-icon"><img alt="BNB Chain logo" src="assets/bnb-chain.svg"/></div><div class="chain-meta"><h3>BNB CHAIN</h3><span>LAUNCHPAD · FLAP</span></div><label class="switch"><input id="bnbToggle" type="checkbox"/><i></i></label><div class="amount-wrap"><span>OPTIONAL DEV BUY</span><div><input disabled="" id="bnbAmount" inputmode="decimal" value="0"/><b>BNB</b></div><small id="bnbUsd">≈ $0.00</small></div></article>
+              <article class="dev-card robinhood" data-chain="robinhood"><div class="chain-icon"><img alt="Robinhood logo" src="assets/robinhood.svg"/></div><div class="chain-meta"><h3>ROBINHOOD CHAIN</h3><span>LAUNCHPAD · PONS</span></div><label class="switch"><input id="rhToggle" type="checkbox"/><i></i></label><div class="amount-wrap"><span>OPTIONAL DEV BUY</span><div><input disabled="" id="rhAmount" inputmode="decimal" value="0"/><b>ETH</b></div><small id="rhUsd">≈ $0.00</small></div></article>
+              <article class="dev-card solana" data-chain="solana"><div class="chain-icon"><img alt="Solana logo" src="assets/solana.svg"/></div><div class="chain-meta"><h3>SOLANA</h3><span>LAUNCHPAD · PUMP.FUN</span></div><label class="switch"><input id="solToggle" type="checkbox"/><i></i></label><div class="amount-wrap"><span>OPTIONAL DEV BUY</span><div><input disabled="" id="solAmount" inputmode="decimal" value="0"/><b>SOL</b></div><small id="solUsd">≈ $0.00</small></div></article>
+            </div>
+            <div class="info-strip"><b>i</b><span>Each dev buy is executed separately. You can use a different amount on every chain.</span></div>
+          </section>
+
+          <section class="form-step" data-step="3">
+            <div class="section-head"><div><span>STEP 03 / 03</span><h2>REVIEW LAUNCH</h2></div><div class="review-badge">3× DEPLOY</div></div>
+            <div class="review-token"><div class="review-logo" id="reviewLogo">T</div><div><span>LAUNCHING</span><h3 id="reviewName">YOUR TOKEN</h3><p id="reviewTicker">$TOKEN · 1,000,000,000 SUPPLY</p></div></div>
+            <div class="review-grid">
+              <article><div class="mini-chain bnb"><img alt="" src="assets/bnb-chain.svg"/></div><span>BNB CHAIN</span><b id="reviewBnb">NO DEV BUY</b><i>READY</i></article>
+              <article><div class="mini-chain robinhood"><img alt="" src="assets/robinhood.svg"/></div><span>ROBINHOOD</span><b id="reviewRh">NO DEV BUY</b><i>READY</i></article>
+              <article><div class="mini-chain solana"><img alt="" src="assets/solana.svg"/></div><span>SOLANA</span><b id="reviewSol">NO DEV BUY</b><i>READY</i></article>
+            </div>
+            <div class="cost-table"><div><span>LAUNCHPAD ROUTES</span><b>FLAP + PONS + PUMP.FUN</b></div><div><span>DEV BUYS</span><b id="reviewBuys">NONE</b></div><div class="total"><span>LAUNCH OUTPUT</span><b>3 TOKENS / 3 MARKETS</b></div></div>
+            <label class="confirm-check"><input id="confirmCheck" type="checkbox"/><i></i><span>I understand that deployment will create three separate token contracts with one shared identity.</span></label>
+          </section>
+
+          <div class="form-errors" id="formErrors" role="alert"></div>
+          <footer class="form-actions"><button class="back-btn" hidden="" id="backBtn" type="button">← BACK</button><div class="draft-status" id="draftStatus">DRAFT SAVED LOCALLY</div><button class="next-btn" id="nextBtn" type="button">CONTINUE TO DEV BUYS <span>→</span></button></footer>
+        </form>
+      </div>
+    </section>
+
+
+
+
+
+
+  </main>
+
+  <div aria-hidden="true" class="modal" id="launchModal"><div class="modal-panel"><button aria-label="Close" class="modal-close" id="modalClose">×</button><div class="deploy-animation"><div class="pulse-core">///</div><i></i><i></i><i></i></div><span class="modal-kicker" id="modalKicker">PREPARING MULTICHAIN LAUNCH</span><h2 id="modalTitle">DEPLOYING ACROSS<br/>3 NETWORKS</h2><div class="deploy-list" id="deployList"><div data-deploy="bnb"><span><img alt="" src="assets/bnb-chain.svg"/></span><b>BNB CHAIN / FLAP</b><i>QUEUED</i></div><div data-deploy="rh"><span><img alt="" src="assets/robinhood.svg"/></span><b>ROBINHOOD / PONS</b><i>QUEUED</i></div><div data-deploy="sol"><span><img alt="" src="assets/solana.svg"/></span><b>SOLANA / PUMP.FUN</b><i>QUEUED</i></div></div><p id="modalNote">Keep this window open while deployments are prepared.</p><button class="done-btn" hidden="" id="doneBtn">VIEW LAUNCH RECEIPT</button></div></div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>

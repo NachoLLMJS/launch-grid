@@ -12,6 +12,14 @@ The header wallet control connects to an injected EIP-1193 wallet and requires B
 
 The token registry intentionally starts at zero launches. It contains no fabricated activity and is ready to be connected to a future launch indexer.
 
+The frontend uses three real HTML pages instead of hiding sections inside the landing:
+
+- `index.html` — product landing and routing explanation
+- `create.html` — standalone launch console
+- `tokens.html` — standalone launched-token registry
+
+The X button on every page links to `https://x.com/getlaunchgrid`.
+
 ## Run locally
 
 ```bash
