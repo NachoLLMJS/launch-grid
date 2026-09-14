@@ -1,0 +1,10 @@
+{
+  "name": "launch-grid-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Frontend prototype for a simultaneous BNB Chain, Robinhood Chain and Solana token launchpad",
+  "scripts": {
+    "dev": "npx --yes serve . -l 4173 --no-clipboard",
+    "check": "node --check app.js && node tests.js"
+  }
+}
