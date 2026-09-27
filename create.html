@@ -38,11 +38,14 @@
           <section class="form-step active" data-step="1">
             <div class="section-head"><div><span>STEP 01 / 03</span><h2>BUILD YOUR TOKEN</h2></div><div class="required">* REQUIRED FIELDS</div></div>
             <div class="token-grid">
-              <label class="logo-upload" id="logoDrop">
-                <input accept="image/png,image/jpeg,image/webp" hidden="" id="logoInput" type="file"/>
-                <span class="logo-preview" id="logoPreview"><b>+</b></span>
-                <strong>UPLOAD LOGO</strong><small>PNG, JPG OR WEBP · MAX 5MB</small>
-              </label>
+              <div class="token-image-control">
+                <label class="logo-upload" id="logoDrop">
+                  <input accept="image/png,image/jpeg,image/webp" hidden="" id="logoInput" type="file"/>
+                  <span class="logo-preview" id="logoPreview"><b>+</b></span>
+                  <strong id="logoAction">ADD TOKEN IMAGE</strong><small>CLICK OR DROP<br/>PNG, JPG, WEBP · MAX 5MB</small>
+                </label>
+                <button class="logo-remove" hidden="" id="logoRemove" type="button">REMOVE IMAGE</button>
+              </div>
               <div class="fields">
                 <label><span>TOKEN NAME *</span><input id="tokenName" maxlength="32" placeholder="e.g. Triad Protocol" required=""/><small><i id="nameCount">0</i>/32</small></label>
                 <label><span>TICKER *</span><div class="input-prefix"><b>$</b><input id="ticker" maxlength="10" placeholder="TRI" required=""/></div><small><i id="tickerCount">0</i>/10</small></label>

@@ -104,10 +104,26 @@
       website: $('#website').value,
       twitter: $('#twitter').value,
       telegram: $('#telegram').value,
+      logo: logoData,
       buys: Object.fromEntries(Object.entries(controls).map(([key, c]) => [key, { enabled: c.toggle.checked, amount: c.amount.value }]))
     };
-    localStorage.setItem(storageKey, JSON.stringify(draft));
-    $('#draftStatus').textContent = 'DRAFT SAVED LOCALLY';
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(draft));
+      $('#draftStatus').textContent = 'DRAFT SAVED LOCALLY';
+    } catch {
+      $('#draftStatus').textContent = 'DRAFT TEXT SAVED · IMAGE TOO LARGE';
+      const withoutLogo = { ...draft, logo: '' };
+      localStorage.setItem(storageKey, JSON.stringify(withoutLogo));
+    }
+  }
+
+  function renderLogo() {
+    const preview = $('#logoPreview');
+    preview.style.backgroundImage = logoData ? `url(${logoData})` : '';
+    preview.innerHTML = logoData ? '' : '<b>+</b>';
+    $('#logoAction').textContent = logoData ? 'REPLACE TOKEN IMAGE' : 'ADD TOKEN IMAGE';
+    $('#logoRemove').hidden = !logoData;
+    $('#logoDrop').classList.toggle('has-image', Boolean(logoData));
   }
 
   function loadDraft() {
@@ -116,6 +132,8 @@
       if (!draft) return;
       const fieldMap = { tokenName: 'name', ticker: 'ticker', description: 'description', supply: 'supply', website: 'website', twitter: 'twitter', telegram: 'telegram' };
       Object.entries(fieldMap).forEach(([id, key]) => { if (typeof draft[key] === 'string') $(`#${id}`).value = draft[key]; });
+      if (typeof draft.logo === 'string' && draft.logo.startsWith('data:image/')) logoData = draft.logo;
+      renderLogo();
       Object.entries(controls).forEach(([key, c]) => {
         const saved = draft.buys?.[key];
         if (saved) { c.toggle.checked = Boolean(saved.enabled); c.amount.disabled = !c.toggle.checked; c.amount.value = saved.amount || '0'; c.toggle.closest('.dev-card').classList.toggle('enabled', c.toggle.checked); updateUsd(key); }
@@ -193,13 +211,57 @@
     c.amount.addEventListener('input', () => { c.amount.value = cleanNumber(c.amount.value); updateUsd(key); saveDraft(); });
   });
 
-  $('#logoInput').addEventListener('change', (event) => {
-    const file = event.target.files[0];
+  function normalizeTokenImage(file) {
+    return new Promise((resolve, reject) => {
+      if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) { reject(new Error('USE A PNG, JPG OR WEBP IMAGE')); return; }
+      if (file.size > 5 * 1024 * 1024) { reject(new Error('IMAGE MUST BE UNDER 5MB')); return; }
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error('COULD NOT READ THAT IMAGE'));
+      reader.onload = () => {
+        const image = new Image();
+        image.onerror = () => reject(new Error('THAT IMAGE COULD NOT BE OPENED'));
+        image.onload = () => {
+          if (image.width < 64 || image.height < 64) { reject(new Error('IMAGE MUST BE AT LEAST 64 × 64 PX')); return; }
+          const size = 512;
+          const canvas = document.createElement('canvas');
+          canvas.width = size; canvas.height = size;
+          const context = canvas.getContext('2d');
+          context.clearRect(0, 0, size, size);
+          const scale = Math.min(size / image.width, size / image.height);
+          const width = image.width * scale;
+          const height = image.height * scale;
+          context.drawImage(image, (size - width) / 2, (size - height) / 2, width, height);
+          resolve(canvas.toDataURL('image/webp', 0.9));
+        };
+        image.src = String(reader.result);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function setTokenImage(file) {
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) { showToast('IMAGE MUST BE UNDER 5MB'); return; }
-    const reader = new FileReader();
-    reader.onload = () => { logoData = String(reader.result); $('#logoPreview').style.backgroundImage = `url(${logoData})`; $('#logoPreview').innerHTML = ''; };
-    reader.readAsDataURL(file);
+    try {
+      logoData = await normalizeTokenImage(file);
+      renderLogo(); saveDraft(); updateReview();
+      showToast('TOKEN IMAGE ADDED');
+    } catch (error) {
+      showToast(error.message || 'COULD NOT ADD TOKEN IMAGE');
+    } finally {
+      $('#logoInput').value = '';
+    }
+  }
+
+  $('#logoInput').addEventListener('change', (event) => setTokenImage(event.target.files[0]));
+  ['dragenter', 'dragover'].forEach((name) => $('#logoDrop').addEventListener(name, (event) => {
+    event.preventDefault(); $('#logoDrop').classList.add('dragging');
+  }));
+  ['dragleave', 'drop'].forEach((name) => $('#logoDrop').addEventListener(name, (event) => {
+    event.preventDefault(); $('#logoDrop').classList.remove('dragging');
+  }));
+  $('#logoDrop').addEventListener('drop', (event) => setTokenImage(event.dataTransfer.files[0]));
+  $('#logoRemove').addEventListener('click', () => {
+    logoData = ''; renderLogo(); saveDraft(); updateReview(); showToast('TOKEN IMAGE REMOVED');
   });
 
   function resetWallet(label = 'CONNECT BNB WALLET') {
@@ -263,6 +325,6 @@
   $('#launchModal').addEventListener('click', (e) => { if (e.target === $('#launchModal') && !$('#modalClose').hidden) closeModal(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#modalClose').hidden) closeModal(); });
 
-  loadDraft(); updateCounts();
+  renderLogo(); loadDraft(); updateCounts();
   if (window.location.hash === '#create') openLauncher();
 })();

@@ -17,6 +17,8 @@ const checks = [
   ['official X link on all pages', [home,create,tokens].every(doc => doc.includes('https://x.com/getlaunchgrid') && doc.includes('target="_blank"'))],
   ['mobile page navigation', [home,create,tokens].every(doc => doc.includes('class="page-nav"')) && css.includes('.page-nav')],
   ['three independent dev buys', ['bnbAmount','rhAmount','solAmount'].every(id => create.includes(`id="${id}"`))],
+  ['token image picker and remove control', create.includes('id="logoInput"') && create.includes('id="logoDrop"') && create.includes('id="logoRemove"')],
+  ['token image drag drop, validation and draft persistence', app.includes("addEventListener('drop'") && app.includes('normalizeTokenImage') && app.includes('logo: logoData') && app.includes('renderLogo()')],
   ['launchpad route mapping', ['BNB CHAIN → FLAP','ROBINHOOD CHAIN → PONS','SOLANA → PUMP.FUN'].every(route => home.includes(route))],
   ['zero fabricated launches', tokens.includes('0 RESULTS') && tokens.includes('NO TOKENS LAUNCHED YET')],
   ['real BNB wallet request on launcher', app.includes("method: 'eth_requestAccounts'") && app.includes("chainId: '0x38'")] ,
